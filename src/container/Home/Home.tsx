@@ -11,6 +11,8 @@ interface Props {
 
 const Home:React.FC<Props> = ({meals,loading}) => {
     const [totalCalories, setTotalCalories] = useState<string[]>([]);
+
+
     return (
         <div className="text-center  mt-3">
             <div className="d-flex">
@@ -26,10 +28,8 @@ const Home:React.FC<Props> = ({meals,loading}) => {
             <div className="mt-3">
                 {loading ? <Spinner/> : (
                     <Dishes meals={meals}/>
-                )
-                }
+                )}
             </div>
-
         </div>
     );
 };

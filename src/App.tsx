@@ -6,7 +6,8 @@ import Home from "./container/Home/Home.tsx";
 import NewMeal from "./components/NewMeal/NewMeal.tsx";
 import {useCallback, useEffect, useState} from "react";
 import axiosApi from "./axiosApi.ts";
-import {ApiMealsObject, Meals} from "./type.ts";
+import {ApiMeals, ApiMealsObject, Meals} from "./type.ts";
+import {createLogger} from "vite";
 const App = () => {
     const location = useLocation();
     const navigate = useNavigate();
@@ -38,13 +39,13 @@ const App = () => {
         }
     },[fetchMeals,location])
 
-
-
-    const saveNewMeal = () => {
-        console.log("it is working")
+    const saveNewMeal = async (meal:ApiMeals) => {
+        console.log()
+        await axiosApi.post(`/meals.json` ,meal);
         setLoading(true)
         navigate("/");
     }
+
 
 
   return (
@@ -55,7 +56,7 @@ const App = () => {
           <main className="container-fluid">
               <Routes>
                   <Route path="/" element={<Home meals={meals} loading={loading}/>}/>
-                  <Route path="/new-meal" element={<NewMeal saveNewMeal={saveNewMeal} loading={loading}/>}/>
+                  <Route path="/new-meal" element={<NewMeal meals={meals} saveNewMeal={saveNewMeal} loading={loading}/>}/>
                   <Route path="*" element={<h1 className="text-center mt-5">Sorry, there is not such page</h1>}/>
               </Routes>
           </main>

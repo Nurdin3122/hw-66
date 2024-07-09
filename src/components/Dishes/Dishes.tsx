@@ -7,10 +7,11 @@ interface Props {
 }
 
 const Dishes:React.FC<Props> = ({meals}) => {
+
     return (
         <div>
             {meals.map(meal => (
-                <Meal meal={meal} key={meal.id}/>
+                <Meal  key={meal.id} meal={meal}/>
             ))}
         </div>
     );
