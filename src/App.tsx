@@ -1,16 +1,15 @@
 
 import './App.css'
-import {Route, Routes, useLocation, useNavigate} from "react-router-dom";
-import Header from "./container/Header/Header.tsx";
+import {Route, Routes, useLocation,} from "react-router-dom";
 import Home from "./container/Home/Home.tsx";
-import NewMeal from "./components/NewMeal/NewMeal.tsx";
 import {useCallback, useEffect, useState} from "react";
 import axiosApi from "./axiosApi.ts";
-import {ApiMeals, ApiMealsObject, Meals} from "./type.ts";
-import {createLogger} from "vite";
+import {ApiMealsObject, Meals} from "./type.ts";
+import CreateMeal from "./components/CreateMeal/CreateMeal.tsx";
+import EditMeal from "./components/CreateMeal/EditMeal.tsx";
+import Layout from "./components/Layout/Layout.tsx";
 const App = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [meals, setMeals] = useState<Meals[]>([]);
 
@@ -39,27 +38,23 @@ const App = () => {
         }
     },[fetchMeals,location])
 
-    const saveNewMeal = async (meal:ApiMeals) => {
-        console.log()
-        await axiosApi.post(`/meals.json` ,meal);
-        setLoading(true)
-        navigate("/");
+    const deleteMeal = async (id:string) => {
+       if(window.confirm('are you sure that you want to delete this cart ?')) {
+           await axiosApi.delete(`/meals/${id}.json`);
+           await fetchMeals();
+       }
     }
-
-
 
   return (
       <>
-          <header>
-              <Header/>
-          </header>
-          <main className="container-fluid">
-              <Routes>
-                  <Route path="/" element={<Home meals={meals} loading={loading}/>}/>
-                  <Route path="/new-meal" element={<NewMeal meals={meals} saveNewMeal={saveNewMeal} loading={loading}/>}/>
-                  <Route path="*" element={<h1 className="text-center mt-5">Sorry, there is not such page</h1>}/>
-              </Routes>
-          </main>
+          <Layout>
+                  <Routes>
+                      <Route path="/" element={<Home meals={meals} loading={loading} deleteMeal={deleteMeal}/>}/>
+                      <Route path="/new-meal" element={<CreateMeal/>}/>
+                      <Route path="edit-meal/:id" element={<EditMeal loading={loading}/>}/>
+                      <Route path="*" element={<h1 className="text-center mt-5">Sorry, there is not such page</h1>}/>
+                  </Routes>
+          </Layout>
       </>
   )
 };

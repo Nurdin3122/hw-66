@@ -5,9 +5,8 @@ import {ApiMeals, MealMutation, Meals} from "../../type.ts";
 interface Props {
     saveNewMeal:(meal:ApiMeals) => void;
     loading:boolean;
-    meals:Meals[];
-    existingDish?:ApiMeals;
 
+    existingDish?:ApiMeals;
 }
 
 const emptyState: MealMutation = {
@@ -16,7 +15,7 @@ const emptyState: MealMutation = {
     calories:"",
 };
 
-const NewMeal:React.FC<Props> = ({saveNewMeal,loading,meals,existingDish}) => {
+const Form:React.FC<Props> = ({saveNewMeal,loading,existingDish}) => {
     const initialState: MealMutation = existingDish
         ? { ...existingDish, calories: existingDish.calories.toString() }
         : emptyState;
@@ -98,4 +97,4 @@ const NewMeal:React.FC<Props> = ({saveNewMeal,loading,meals,existingDish}) => {
     );
 };
 
-export default NewMeal;
+export default Form;

@@ -1,17 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Dishes from "../../components/Dishes/Dishes.tsx";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {Meals} from "../../type.ts";
 import Spinner from "../../components/Spinner/Spinner.tsx";
 
 interface Props {
     meals:Meals[];
     loading:boolean;
+    deleteMeal:(id:string)=>void
 }
 
-const Home:React.FC<Props> = ({meals,loading}) => {
-    const [totalCalories, setTotalCalories] = useState<string[]>([]);
+const Home:React.FC<Props> = ({meals,loading,deleteMeal}) => {
+    const [totalCalories, setTotalCalories] = useState(0);
 
+    useEffect(() => {
+        const calories = meals.reduce((total, meal) => total + meal.calories, 0);
+        setTotalCalories(calories);
+    }, [meals]);
 
     return (
         <div className="text-center  mt-3">
@@ -27,7 +32,7 @@ const Home:React.FC<Props> = ({meals,loading}) => {
             </div>
             <div className="mt-3">
                 {loading ? <Spinner/> : (
-                    <Dishes meals={meals}/>
+                    <Dishes meals={meals} deleteMeal={deleteMeal}/>
                 )}
             </div>
         </div>
